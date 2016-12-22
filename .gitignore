@@ -40,4 +40,4 @@ jspm_packages
 .idea
 
 # generated for npm
-index.js
+/index.js
