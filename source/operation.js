@@ -1,19 +1,22 @@
-const setAssign = (target, source) => {
-  source.forEach((v) => target.add(v))
-  return target
-}
+/**
+ * Operation for Immutable operate Data Structure
+ * use only Object and Array for JSON support
+ */
 
-const mapCopy = (object) => {
+// Object
+const objectCopy = (object) => {
   const result = {}
   for (const key in object) if (object.hasOwnProperty(key)) result[ key ] = object[ key ]
   return result
 }
-const mapMap = (object, mapFunc) => {
-  const result = {}
-  for (const key in object) if (object.hasOwnProperty(key)) result[ key ] = mapFunc(object[ key ], key)
-  return result
+
+// Set === Object
+const setAssign = (set, assign) => {
+  assign.forEach((v) => set.add(v))
+  return set
 }
 
+// Map === Object
 const mapSet = (map, key, value) => (map[ key ] === value) ? map : { ...map, [key]: value }
 const mapMerge = (map, merge) => {
   for (const key in merge) { // check if has new data
@@ -23,7 +26,13 @@ const mapMerge = (map, merge) => {
   }
   return map
 }
+const mapMap = (map, mapFunc) => {
+  const result = {}
+  for (const key in map) result[ key ] = mapFunc(map[ key ], key)
+  return result
+}
 
+// List === Array
 const listSet = (list, index, value) => {
   const nextList = [ ...list ]
   nextList[ index ] = value
@@ -44,6 +53,7 @@ const listShift = (list) => {
 }
 const listUnshift = (list, value) => [ value, ...list ]
 const listConcat = (list, concat) => [ ...list, ...concat ]
+const listFindPush = (list, value) => ~list.indexOf(value) ? [ ...list, value ] : list
 const listFindDelete = (list, value) => {
   const index = list.indexOf(value)
   return !~index ? list : [ ...list.slice(0, index), ...list.slice(index + 1) ]
@@ -56,12 +66,13 @@ const listFindMove = (list, index, value) => {
 }
 
 export default {
+  objectCopy,
+
   setAssign,
-  mapCopy,
-  mapMap,
 
   mapSet,
   mapMerge,
+  mapMap,
 
   listSet,
   listInsert,
@@ -71,6 +82,7 @@ export default {
   listShift,
   listUnshift,
   listConcat,
+  listFindPush,
   listFindDelete,
   listFindMove
 }

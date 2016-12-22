@@ -1,5 +1,5 @@
 import Operation from './operation'
-import { Scheme, MapScheme, ListScheme } from './scheme'
+import { MapScheme, ListScheme } from './scheme'
 
 const mapActionMap = {
   'map:set': (state, { key, value }) => Operation.mapSet(state, key, value),
@@ -15,17 +15,17 @@ const listActionMap = {
   'list:shift': (state, payload) => Operation.listShift(state),
   'list:unshift': (state, { value }) => Operation.listUnshift(state, value),
   'list:concat': (state, { concat }) => Operation.listConcat(state, concat),
+  'list:find-push': (state, { value }) => Operation.listFindPush(state, value),
   'list:find-delete': (state, { value }) => Operation.listFindDelete(state, value),
   'list:find-move': (state, { index, value }) => Operation.listFindMove(state, index, value)
 }
 
 function MapOf (name, object, extraActionMap = {}) {
-  return new MapScheme(name, Operation.mapCopy(object), { ...mapActionMap, ...extraActionMap })
+  return new MapScheme(name, Operation.objectCopy(object), { ...mapActionMap, ...extraActionMap })
 }
 
-function ListOf (name, itemScheme, extraActionMap = {}) {
-  // if (itemScheme instanceof Scheme === false) throw new Error('expected scheme')
-  return new ListScheme(name, [ itemScheme ], { ...listActionMap, ...extraActionMap })
+function ListOf (name, item, extraActionMap = {}) {
+  return new ListScheme(name, [ item ], { ...listActionMap, ...extraActionMap })
 }
 
 export {
