@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, height=device-height, minimum-scale=1.0, initial-scale=1.0, user-scalable=0">
+    <title>Example</title>
+    <script src="../index.js"></script>
+    <script src="./test.js"></script>
+</head>
+<body>
+<script>
+    const {
+      schemeA,
+      schemeB,
+      schemeBList,
+      schemeValueList,
+      schemeC,
+      stateMap
+    } = test()
+    document.write('<h4>schemeC.toStructJSON()</h4>')
+    document.write('<pre>')
+    document.write(JSON.stringify(schemeC.toStructJSON(), null, '·   '))
+    document.write('</pre>')
+    document.write('<hr />')
+    document.write('<h4>stateMap</h4>')
+    document.write('<pre>')
+    document.write(JSON.stringify(stateMap, null, '·   '))
+    document.write('</pre>')
+</script>
+</body>
+</html>
