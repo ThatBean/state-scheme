@@ -1,43 +1,60 @@
-import Operation from './operation'
-import { MapScheme, ListScheme } from './scheme'
+import {
+  objectSet,
+  objectCopy,
+  objectDelete,
+  objectMerge,
+  arraySet,
+  arrayDelete,
+  arrayInsert,
+  arrayPush,
+  arrayUnshift,
+  arrayPop,
+  arrayShift,
+  arrayConcat,
+  arrayFindPush,
+  arrayFindDelete,
+  arrayFindMove
+} from './operation'
+import { ObjectScheme, ArrayScheme } from './scheme'
 
-const mapActionMap = {
-  'map:set': (state, { key, value }) => Operation.mapSet(state, key, value),
-  'map:merge': (state, { merge }) => Operation.mapMerge(state, merge)
+const objectActionReducerMap = {
+  'set': (state, { key, value }) => objectSet(state, key, value),
+  'delete': (state, { key }) => objectDelete(state, key),
+  'merge': (state, { merge }) => objectMerge(state, merge)
 }
 
-const listActionMap = {
-  'list:set': (state, { index, value }) => Operation.listSet(state, index, value),
-  'list:insert': (state, { index, value }) => Operation.listInsert(state, index, value),
-  'list:delete': (state, { index }) => Operation.listDelete(state, index),
-  'list:push': (state, { value }) => Operation.listPush(state, value),
-  'list:pop': (state, payload) => Operation.listPop(state),
-  'list:shift': (state, payload) => Operation.listShift(state),
-  'list:unshift': (state, { value }) => Operation.listUnshift(state, value),
-  'list:concat': (state, { concat }) => Operation.listConcat(state, concat),
-  'list:find-push': (state, { value }) => Operation.listFindPush(state, value),
-  'list:find-delete': (state, { value }) => Operation.listFindDelete(state, value),
-  'list:find-move': (state, { index, value }) => Operation.listFindMove(state, index, value)
+const arrayActionReducerMap = {
+  'set': (state, { index, value }) => arraySet(state, index, value),
+  'delete': (state, { index }) => arrayDelete(state, index),
+  'insert': (state, { index, value }) => arrayInsert(state, index, value),
+  'push': (state, { value }) => arrayPush(state, value),
+  'pop': (state, payload) => arrayPop(state),
+  'shift': (state, payload) => arrayShift(state),
+  'unshift': (state, { value }) => arrayUnshift(state, value),
+  'concat': (state, { concat }) => arrayConcat(state, concat),
+  'find-push': (state, { value }) => arrayFindPush(state, value),
+  'find-delete': (state, { value }) => arrayFindDelete(state, value),
+  'find-move': (state, { index, value }) => arrayFindMove(state, index, value)
 }
 
-function MapOf (name, object, extraActionMap = {}) {
-  return new MapScheme(name, Operation.objectCopy(object), { ...mapActionMap, ...extraActionMap })
+function ObjectAs (name, object, extraActionReducerMap = {}) {
+  return new ObjectScheme(name, objectCopy(object), { ...objectActionReducerMap, ...extraActionReducerMap })
 }
 
-function ListOf (name, item, extraActionMap = {}) {
-  return new ListScheme(name, [ item ], { ...listActionMap, ...extraActionMap })
+function ArrayOf (name, item, extraActionReducerMap = {}) {
+  return new ArrayScheme(name, [ item ], { ...arrayActionReducerMap, ...extraActionReducerMap })
 }
 
 export {
-  MapOf,
-  ListOf,
-  mapActionMap,
-  listActionMap
+  ObjectAs,
+  ArrayOf,
+  objectActionReducerMap,
+  arrayActionReducerMap
 }
 
 export default {
-  MapOf,
-  ListOf,
-  mapActionMap,
-  listActionMap
+  ObjectAs,
+  ArrayOf,
+  objectActionReducerMap,
+  arrayActionReducerMap
 }

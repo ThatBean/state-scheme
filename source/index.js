@@ -1,22 +1,25 @@
-import { Scheme, MapScheme, ListScheme } from './scheme'
-import { MapOf, ListOf, mapActionMap, listActionMap } from './creator'
+import Operation from './operation'
+import { Scheme, ObjectScheme, ArrayScheme } from './scheme'
+import { ObjectAs, ArrayOf, objectActionReducerMap, arrayActionReducerMap } from './creator'
 
 export {
   Scheme,
-  MapScheme,
-  ListScheme,
-  MapOf,
-  ListOf,
-  mapActionMap,
-  listActionMap
+  ObjectScheme,
+  ArrayScheme,
+  ObjectAs,
+  ArrayOf,
+  objectActionReducerMap,
+  arrayActionReducerMap,
+  Operation
 }
 
 export default {
   Scheme,
-  MapScheme,
-  ListScheme,
-  MapOf,
-  ListOf,
-  mapActionMap,
-  listActionMap
+  ObjectScheme,
+  ArrayScheme,
+  ObjectAs,
+  ArrayOf,
+  objectActionReducerMap,
+  arrayActionReducerMap,
+  Operation
 }
