@@ -1,8 +1,8 @@
 const webpack = require('webpack')
 
-const PRODUCTION = process.env.NODE_ENV === 'production'
+const __DEV__ = process.env.NODE_ENV !== 'production'
 
-console.log('PRODUCTION', PRODUCTION)
+console.log('__DEV__', __DEV__)
 
 module.exports = {
   entry: {
@@ -18,10 +18,12 @@ module.exports = {
     loaders: [ { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' } ]
   },
   target: 'node',
-  plugins: PRODUCTION
+  plugins: __DEV__
     ? [
-      new webpack.DefinePlugin({ 'process.env': { NODE_ENV: JSON.stringify('production') } }),
-      new webpack.optimize.UglifyJsPlugin()
+      new webpack.DefinePlugin({ __DEV__: JSON.stringify(__DEV__) })
     ]
-    : []
+    : [
+      new webpack.optimize.OccurenceOrderPlugin(),
+      new webpack.DefinePlugin({ __DEV__: JSON.stringify(__DEV__) })
+    ]
 }

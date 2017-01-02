@@ -17,7 +17,7 @@
       schemeValueList,
       schemeC,
       stateMap
-    } = test()
+    } = test() // globally accessible
     document.write('<h4>schemeC.toStructJSON()</h4>')
     document.write('<pre>')
     document.write(JSON.stringify(schemeC.toStructJSON(), null, '·   '))
@@ -25,7 +25,9 @@
     document.write('<hr />')
     document.write('<h4>stateMap</h4>')
     document.write('<pre>')
-    document.write(JSON.stringify(stateMap, null, '·   '))
+    Object.keys(stateMap).forEach((key) => {
+      document.write('[' + key + ']\t: ' + JSON.stringify(stateMap[key]) + '\n')
+    })
     document.write('</pre>')
 </script>
 </body>

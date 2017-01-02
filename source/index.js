@@ -1,6 +1,6 @@
 import Operation from './operation'
 import { Scheme, ObjectScheme, ArrayScheme } from './scheme'
-import { ObjectAs, ArrayOf, objectActionReducerMap, arrayActionReducerMap } from './creator'
+import { ObjectAs, ArrayOf, objectActMap, arrayActMap } from './creator'
 
 export {
   Scheme,
@@ -8,8 +8,8 @@ export {
   ArrayScheme,
   ObjectAs,
   ArrayOf,
-  objectActionReducerMap,
-  arrayActionReducerMap,
+  objectActMap,
+  arrayActMap,
   Operation
 }
 
@@ -19,7 +19,7 @@ export default {
   ArrayScheme,
   ObjectAs,
   ArrayOf,
-  objectActionReducerMap,
-  arrayActionReducerMap,
+  objectActMap,
+  arrayActMap,
   Operation
 }

@@ -1,11 +1,16 @@
 import Operation from './operation'
 
 const setAssign = (set, assign) => {
-  assign.forEach((v) => set.add(v))
+  assign.forEach((v) => {
+    set.has(v) && console.error('duplicate name in set', set, assign, v)
+    set.add(v)
+  })
   return set
 }
 
 const methodCheck = (target, name) => target instanceof Object && name in target
+
+const toStructJSONWithCheck = (value) => methodCheck(value, 'toStructJSON') ? value.toStructJSON() : value
 
 const DEFAULT_REDUCER = (state, action) => {
   console.error('DEFAULT_REDUCER', state, action)
@@ -13,10 +18,10 @@ const DEFAULT_REDUCER = (state, action) => {
 }
 
 class Scheme {
-  constructor (name, struct, actionReducerMap) {
+  constructor (name, struct, actMap) {
     this.name = name
     this.struct = struct
-    this.actionReducerMap = actionReducerMap
+    this.actMap = actMap
     this.initialState = null
     this.acceptNameSet = null
     this.actionReducer = null
@@ -25,31 +30,33 @@ class Scheme {
   }
 
   getActionReducer () {
-    const { actionReducerMap } = this
+    const { actMap } = this
     return (state, { type, payload }) => {
-      const actionReducer = actionReducerMap[ type ]
+      const actionReducer = actMap[ type ]
       if (actionReducer) return actionReducer(state, payload) // processed
-      return state
+      __DEV__ && console.warn('missed action', type, payload)
+      return state // missed
     }
   }
 
   getReducer () {
     const { name, initialState, acceptNameSet, actionReducer, structReducer } = this
+    const reducer = (state, action) => (action.type !== undefined && action.name === name)
+      ? actionReducer(state, action) // process accepted action here
+      : structReducer(state, action) // pass action down
     return (state = initialState, action) => {
-      if (!acceptNameSet.has(action.name)) return state // filtered by accept name
-      if (action.name === name) return actionReducer(state, action) // process accepted action here
-      return structReducer(state, action) // pass action down
+      if (!acceptNameSet.has(action.name)) return state // filtered by accept name, (most case)
+      if (action.batch !== undefined && action.name === name) return action.batch.reduce(reducer, state) // batched action
+      return reducer(state, action) // single action
     }
   }
 
-  toStructJSON () {
-    return methodCheck(this.struct, 'toStructJSON') ? this.struct.toStructJSON() : this.struct
-  }
+  toStructJSON () { return toStructJSONWithCheck(this.struct) }
 }
 
 class ObjectScheme extends Scheme {
-  constructor (name, struct, actionReducerMap) {
-    super(name, struct, actionReducerMap)
+  constructor (name, struct, actMap) {
+    super(name, struct, actMap)
 
     const initialState = {}
     const acceptNameSet = new Set()
@@ -68,16 +75,14 @@ class ObjectScheme extends Scheme {
 
     this.initialState = initialState
     this.acceptNameSet = acceptNameSet
-    this.structReducer = ObjectScheme.getObjectSchemeReducer(schemeKeyList, this.struct)
+    this.structReducer = ObjectScheme.getStructReducer(schemeKeyList, this.struct)
     this.actionReducer = this.getActionReducer()
     this.reducer = this.getReducer()
   }
 
-  toStructJSON () {
-    return Operation.objectMap(this.struct, (value) => methodCheck(value, 'toStructJSON') ? value.toStructJSON() : value)
-  }
+  toStructJSON () { return Operation.objectMap(this.struct, toStructJSONWithCheck) }
 
-  static getObjectSchemeReducer (schemeKeyList, schemeMap) {
+  static getStructReducer (schemeKeyList, schemeMap) {
     return (state, action) => {
       let hasChanged = false
       const changedState = {}
@@ -95,8 +100,8 @@ class ObjectScheme extends Scheme {
 }
 
 class ArrayScheme extends Scheme {
-  constructor (name, struct, actionReducerMap) {
-    super(name, struct, actionReducerMap)
+  constructor (name, struct, actMap) {
+    super(name, struct, actMap)
 
     const value = this.struct[ 0 ]
     const isScheme = value instanceof Scheme
@@ -104,17 +109,15 @@ class ArrayScheme extends Scheme {
     acceptNameSet.add(this.name)
 
     this.initialState = []
-    this.acceptNameSet = isScheme ? setAssign(acceptNameSet, value.acceptNameSet) : acceptNameSet
-    this.structReducer = isScheme ? ArrayScheme.getArraySchemeReducer(value) : DEFAULT_REDUCER
+    this.acceptNameSet = acceptNameSet
+    this.structReducer = isScheme ? ArrayScheme.getStructReducer(value) : DEFAULT_REDUCER
     this.actionReducer = this.getActionReducer()
     this.reducer = this.getReducer()
   }
 
-  toStructJSON () {
-    return this.struct.map((value) => methodCheck(value, 'toStructJSON') ? value.toStructJSON() : value)
-  }
+  toStructJSON () { return this.struct.map(toStructJSONWithCheck) }
 
-  static getArraySchemeReducer (scheme) {
+  static getStructReducer (scheme) {
     return (arrayState, action) => {
       let hasChanged = false
       let nextArrayState = null
