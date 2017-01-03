@@ -1,15 +1,15 @@
 const webpack = require('webpack')
 
-const __DEV__ = process.env.NODE_ENV !== 'production'
+const PRODUCTION = process.env.NODE_ENV === 'production'
 
-console.log('__DEV__', __DEV__)
+console.log('PRODUCTION', PRODUCTION)
 
 module.exports = {
   entry: {
     'index': './source/index'
   },
   output: {
-    path: './',
+    path: './library',
     filename: '[name].js',
     library: 'StateScheme',
     libraryTarget: 'umd'
@@ -20,10 +20,10 @@ module.exports = {
   target: 'node',
   plugins: __DEV__
     ? [
-      new webpack.DefinePlugin({ __DEV__: JSON.stringify(__DEV__) })
+      new webpack.DefinePlugin({ 'process.env': { NODE_ENV: JSON.stringify('production') } })
     ]
     : [
       new webpack.optimize.OccurenceOrderPlugin(),
-      new webpack.DefinePlugin({ __DEV__: JSON.stringify(__DEV__) })
+      new webpack.DefinePlugin({ 'process.env': { NODE_ENV: JSON.stringify('production') } })
     ]
 }

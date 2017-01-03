@@ -1,5 +1,7 @@
 import Operation from './operation'
 
+const __DEV__ = process.env.NODE_ENV !== 'production'
+
 const setAssign = (set, assign) => {
   assign.forEach((v) => {
     set.has(v) && console.error('duplicate name in set', set, assign, v)
