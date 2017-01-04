@@ -11,9 +11,13 @@ import {
   arrayPop,
   arrayShift,
   arrayConcat,
+  arrayMatchPush,
+  arrayMatchDelete,
+  arrayMatchMove,
   arrayFindPush,
   arrayFindDelete,
-  arrayFindMove
+  arrayFindMove,
+  arrayFindSet
 } from './operation'
 import { ObjectScheme, ArrayScheme } from './scheme'
 
@@ -32,9 +36,13 @@ const arrayActMap = {
   'shift': (state, payload) => arrayShift(state),
   'unshift': (state, { value }) => arrayUnshift(state, value),
   'concat': (state, { concat }) => arrayConcat(state, concat),
-  'findPush': (state, { value }) => arrayFindPush(state, value),
-  'findDelete': (state, { value }) => arrayFindDelete(state, value),
-  'findMove': (state, { index, value }) => arrayFindMove(state, index, value)
+  'matchPush': (state, { value }) => arrayMatchPush(state, value),
+  'matchDelete': (state, { value }) => arrayMatchDelete(state, value),
+  'matchMove': (state, { index, value }) => arrayMatchMove(state, index, value),
+  'findPush': (state, { find, value }) => arrayFindPush(state, find, value),
+  'findDelete': (state, { find }) => arrayFindDelete(state, find),
+  'findMove': (state, { find, index }) => arrayFindMove(state, find, index),
+  'findSet': (state, { find, index, value }) => arrayFindSet(state, find, value)
 }
 
 function ObjectAs (name, object, extraActMap = {}) {

@@ -94,7 +94,7 @@ window.test = () => {
   stateMap.d4 = schemeValueList.reducer(stateMap.d3, { name: 'SchemeValueList', type: 'pop' })
   stateMap.d5 = schemeValueList.reducer(stateMap.d4, { name: 'SchemeValueList', type: 'shift' })
   stateMap.d6 = schemeValueList.reducer(stateMap.d5, { name: 'SchemeValueList', type: 'concat', payload: { concat: [ 4, 5, 6 ] } })
-  stateMap.d7 = schemeValueList.reducer(stateMap.d6, { name: 'SchemeValueList', type: 'findDelete', payload: { value: 5 } })
+  stateMap.d7 = schemeValueList.reducer(stateMap.d6, { name: 'SchemeValueList', type: 'matchDelete', payload: { value: 5 } })
   stateMap.d3b = schemeValueList.reducer(undefined, {
     name: 'SchemeValueList',
     batch: [
@@ -109,7 +109,7 @@ window.test = () => {
       { name: 'SchemeValueList', type: 'pop' },
       { name: 'SchemeValueList', type: 'shift' },
       { name: 'SchemeValueList', type: 'concat', payload: { concat: [ 4, 5, 6 ] } },
-      { name: 'SchemeValueList', type: 'findDelete', payload: { value: 5 } }
+      { name: 'SchemeValueList', type: 'matchDelete', payload: { value: 5 } }
     ]
   })
 

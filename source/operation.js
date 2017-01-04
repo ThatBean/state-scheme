@@ -47,16 +47,35 @@ const arrayShift = (array) => {
   return result
 }
 const arrayConcat = (array, concat) => [ ...array, ...concat ]
-const arrayFindPush = (array, value) => ~array.indexOf(value) ? array : [ ...array, value ]
-const arrayFindDelete = (array, value) => {
+const arrayMatchPush = (array, value) => ~array.indexOf(value) ? array : [ ...array, value ]
+const arrayMatchDelete = (array, value) => {
   const index = array.indexOf(value)
   return !~index ? array : [ ...array.slice(0, index), ...array.slice(index + 1) ]
 }
-const arrayFindMove = (array, index, value) => {
+const arrayMatchMove = (array, index, value) => {
   const fromIndex = array.indexOf(value)
   if (!~fromIndex || fromIndex === index) return array
   if (fromIndex < index) return [ ...array.slice(0, fromIndex), ...array.slice(fromIndex + 1, index), value, ...array.slice(index) ]
   else return [ ...array.slice(0, index), value, ...array.slice(index, fromIndex), ...array.slice(fromIndex + 1) ]
+}
+const arrayFindPush = (array, find, value) => ~array.findIndex(find) ? array : [ ...array, value ]
+const arrayFindDelete = (array, find) => {
+  const index = array.findIndex(find)
+  return !~index ? array : [ ...array.slice(0, index), ...array.slice(index + 1) ]
+}
+const arrayFindMove = (array, find, index) => {
+  const fromIndex = array.findIndex(find)
+  if (!~fromIndex || fromIndex === index) return array
+  const value = array[index]
+  if (fromIndex < index) return [ ...array.slice(0, fromIndex), ...array.slice(fromIndex + 1, index), value, ...array.slice(index) ]
+  else return [ ...array.slice(0, index), value, ...array.slice(index, fromIndex), ...array.slice(fromIndex + 1) ]
+}
+const arrayFindSet = (array, find, value) => {
+  const index = array.findIndex(find)
+  if (!~index || array[index] === value) return array
+  const result = [ ...array ]
+  result[ index ] = value
+  return result
 }
 
 export {
@@ -74,9 +93,13 @@ export {
   arrayPop,
   arrayShift,
   arrayConcat,
+  arrayMatchPush,
+  arrayMatchDelete,
+  arrayMatchMove,
   arrayFindPush,
   arrayFindDelete,
-  arrayFindMove
+  arrayFindMove,
+  arrayFindSet
 }
 
 export default {
@@ -94,7 +117,11 @@ export default {
   arrayPop,
   arrayShift,
   arrayConcat,
+  arrayMatchPush,
+  arrayMatchDelete,
+  arrayMatchMove,
   arrayFindPush,
   arrayFindDelete,
-  arrayFindMove
+  arrayFindMove,
+  arrayFindSet
 }
