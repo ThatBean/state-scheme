@@ -1,76 +1,127 @@
-const setAssign = (target, source) => {
-  source.forEach((v) => target.add(v))
-  return target
-}
+/**
+ * Operation for Immutable operate Data Structure
+ * use only Object and Array for JSON support
+ */
 
-const mapCopy = (object) => {
-  const result = {}
-  for (const key in object) if (object.hasOwnProperty(key)) result[ key ] = object[ key ]
+// Object
+const objectSet = (object, key, value) => (object[ key ] === value) ? object : { ...object, [key]: value }
+const objectCopy = (object) => ({ ...object })
+const objectDelete = (object, key) => {
+  if (!(key in object)) return object
+  const result = { ...object }
+  delete result[ key ]
   return result
 }
-const mapMap = (object, mapFunc) => {
+const objectMap = (object, mapFunc) => {
   const result = {}
-  for (const key in object) if (object.hasOwnProperty(key)) result[ key ] = mapFunc(object[ key ], key)
+  for (const key in object) result[ key ] = mapFunc(object[ key ], key)
   return result
 }
-
-const mapSet = (map, key, value) => (map[ key ] === value) ? map : { ...map, [key]: value }
-const mapMerge = (map, merge) => {
+const objectMerge = (object, merge) => {
   for (const key in merge) { // check if has new data
     const value = merge[ key ]
-    if (map[ key ] === value) continue
-    return { ...map, ...merge }
+    if (object[ key ] === value) continue
+    return { ...object, ...merge }
   }
-  return map
+  return object
 }
 
-const listSet = (list, index, value) => {
-  const nextList = [ ...list ]
-  nextList[ index ] = value
-  return nextList
+// array
+const arraySet = (array, index, value) => {
+  const result = [ ...array ]
+  result[ index ] = value
+  return result
 }
-const listInsert = (list, index, value) => [ ...list.slice(0, index), value, ...list.slice(index) ]
-const listDelete = (list, index) => [ ...list.slice(0, index), ...list.slice(index + 1) ]
-const listPush = (list, value) => [ ...list, value ]
-const listPop = (list) => {
-  const nextList = [ ...list ]
-  nextList.pop()
-  return nextList
+const arrayDelete = (array, index) => [ ...array.slice(0, index), ...array.slice(index + 1) ]
+const arrayInsert = (array, index, value) => [ ...array.slice(0, index), value, ...array.slice(index) ]
+const arrayPush = (array, value) => [ ...array, value ]
+const arrayUnshift = (array, value) => [ value, ...array ]
+const arrayPop = (array) => {
+  const result = [ ...array ]
+  result.pop()
+  return result
 }
-const listShift = (list) => {
-  const nextList = [ ...list ]
-  nextList.shift()
-  return nextList
+const arrayShift = (array) => {
+  const result = [ ...array ]
+  result.shift()
+  return result
 }
-const listUnshift = (list, value) => [ value, ...list ]
-const listConcat = (list, concat) => [ ...list, ...concat ]
-const listFindDelete = (list, value) => {
-  const index = list.indexOf(value)
-  return !~index ? list : [ ...list.slice(0, index), ...list.slice(index + 1) ]
+const arrayConcat = (array, concat) => [ ...array, ...concat ]
+const arrayMatchPush = (array, value) => ~array.indexOf(value) ? array : [ ...array, value ]
+const arrayMatchDelete = (array, value) => {
+  const index = array.indexOf(value)
+  return !~index ? array : [ ...array.slice(0, index), ...array.slice(index + 1) ]
 }
-const listFindMove = (list, index, value) => {
-  const fromIndex = list.indexOf(value)
-  if (!~fromIndex || fromIndex === index) return list
-  if (fromIndex < index) return [ ...list.slice(0, fromIndex), ...list.slice(fromIndex + 1, index), value, ...list.slice(index) ]
-  else return [ ...list.slice(0, index), value, ...list.slice(index, fromIndex), ...list.slice(fromIndex + 1) ]
+const arrayMatchMove = (array, index, value) => {
+  const fromIndex = array.indexOf(value)
+  if (!~fromIndex || fromIndex === index) return array
+  if (fromIndex < index) return [ ...array.slice(0, fromIndex), ...array.slice(fromIndex + 1, index), value, ...array.slice(index) ]
+  else return [ ...array.slice(0, index), value, ...array.slice(index, fromIndex), ...array.slice(fromIndex + 1) ]
+}
+const arrayFindPush = (array, find, value) => ~array.findIndex(find) ? array : [ ...array, value ]
+const arrayFindDelete = (array, find) => {
+  const index = array.findIndex(find)
+  return !~index ? array : [ ...array.slice(0, index), ...array.slice(index + 1) ]
+}
+const arrayFindMove = (array, find, index) => {
+  const fromIndex = array.findIndex(find)
+  if (!~fromIndex || fromIndex === index) return array
+  const value = array[index]
+  if (fromIndex < index) return [ ...array.slice(0, fromIndex), ...array.slice(fromIndex + 1, index), value, ...array.slice(index) ]
+  else return [ ...array.slice(0, index), value, ...array.slice(index, fromIndex), ...array.slice(fromIndex + 1) ]
+}
+const arrayFindSet = (array, find, value) => {
+  const index = array.findIndex(find)
+  if (!~index || array[index] === value) return array
+  const result = [ ...array ]
+  result[ index ] = value
+  return result
+}
+
+export {
+  objectSet,
+  objectCopy,
+  objectDelete,
+  objectMerge,
+  objectMap,
+
+  arraySet,
+  arrayDelete,
+  arrayInsert,
+  arrayPush,
+  arrayUnshift,
+  arrayPop,
+  arrayShift,
+  arrayConcat,
+  arrayMatchPush,
+  arrayMatchDelete,
+  arrayMatchMove,
+  arrayFindPush,
+  arrayFindDelete,
+  arrayFindMove,
+  arrayFindSet
 }
 
 export default {
-  setAssign,
-  mapCopy,
-  mapMap,
+  objectSet,
+  objectCopy,
+  objectDelete,
+  objectMerge,
+  objectMap,
 
-  mapSet,
-  mapMerge,
-
-  listSet,
-  listInsert,
-  listDelete,
-  listPush,
-  listPop,
-  listShift,
-  listUnshift,
-  listConcat,
-  listFindDelete,
-  listFindMove
+  arraySet,
+  arrayDelete,
+  arrayInsert,
+  arrayPush,
+  arrayUnshift,
+  arrayPop,
+  arrayShift,
+  arrayConcat,
+  arrayMatchPush,
+  arrayMatchDelete,
+  arrayMatchMove,
+  arrayFindPush,
+  arrayFindDelete,
+  arrayFindMove,
+  arrayFindSet
 }

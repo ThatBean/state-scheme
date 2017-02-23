@@ -9,7 +9,7 @@ module.exports = {
     'index': './source/index'
   },
   output: {
-    path: './',
+    path: './distribution',
     filename: '[name].js',
     library: 'StateScheme',
     libraryTarget: 'umd'
@@ -20,8 +20,10 @@ module.exports = {
   target: 'node',
   plugins: PRODUCTION
     ? [
-      new webpack.DefinePlugin({ 'process.env': { NODE_ENV: JSON.stringify('production') } }),
-      new webpack.optimize.UglifyJsPlugin()
+      new webpack.DefinePlugin({ 'process.env': { NODE_ENV: JSON.stringify(process.env.NODE_ENV) } })
     ]
-    : []
+    : [
+      new webpack.optimize.OccurenceOrderPlugin(),
+      new webpack.DefinePlugin({ 'process.env': { NODE_ENV: JSON.stringify(process.env.NODE_ENV) } })
+    ]
 }

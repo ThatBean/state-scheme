@@ -40,4 +40,5 @@ jspm_packages
 .idea
 
 # generated for npm
-/index.js
+/library
+/distribution
