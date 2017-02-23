@@ -42,7 +42,7 @@ const arrayActMap = {
   'findPush': (state, { find, value }) => arrayFindPush(state, find, value),
   'findDelete': (state, { find }) => arrayFindDelete(state, find),
   'findMove': (state, { find, index }) => arrayFindMove(state, find, index),
-  'findSet': (state, { find, index, value }) => arrayFindSet(state, find, value)
+  'findSet': (state, { find, value }) => arrayFindSet(state, find, value)
 }
 
 function ObjectAs (name, object, extraActMap = {}) {

@@ -1,6 +1,9 @@
 # source
-source
-example
+/source
+/example
+
+# generated
+/distribution
 
 # config files
 .npmignore
