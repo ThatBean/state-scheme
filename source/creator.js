@@ -1,6 +1,8 @@
-import {
+import { Operation } from './operation'
+import { ObjectScheme, ArrayScheme } from './scheme'
+
+const {
   objectSet,
-  objectCopy,
   objectDelete,
   objectMerge,
   arraySet,
@@ -18,8 +20,7 @@ import {
   arrayFindDelete,
   arrayFindMove,
   arrayFindSet
-} from './operation'
-import { ObjectScheme, ArrayScheme } from './scheme'
+} = Operation
 
 const objectActMap = {
   'set': (state, { key, value }) => objectSet(state, key, value),
@@ -46,7 +47,11 @@ const arrayActMap = {
 }
 
 function ObjectAs (name, object, extraActMap = {}) {
-  return new ObjectScheme(name, objectCopy(object), { ...objectActMap, ...extraActMap })
+  return new ObjectScheme(
+    name,
+    { ...object },
+    { ...objectActMap, ...extraActMap }
+  )
 }
 
 function ArrayOf (name, item, extraActMap = {}) {
@@ -54,13 +59,6 @@ function ArrayOf (name, item, extraActMap = {}) {
 }
 
 export {
-  ObjectAs,
-  ArrayOf,
-  objectActMap,
-  arrayActMap
-}
-
-export default {
   ObjectAs,
   ArrayOf,
   objectActMap,

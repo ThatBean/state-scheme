@@ -10,25 +10,25 @@
 </head>
 <body>
 <script>
-    const {
-      schemeA,
-      schemeB,
-      schemeBList,
-      schemeValueList,
-      schemeC,
-      stateMap
-    } = test() // globally accessible
-    document.write('<h4>schemeC.toStructJSON()</h4>')
-    document.write('<pre>')
-    document.write(JSON.stringify(schemeC.toStructJSON(), null, '·   '))
-    document.write('</pre>')
-    document.write('<hr />')
-    document.write('<h4>stateMap</h4>')
-    document.write('<pre>')
-    Object.keys(stateMap).forEach((key) => {
-      document.write('[' + key + ']\t: ' + JSON.stringify(stateMap[key]) + '\n')
-    })
-    document.write('</pre>')
+  window.testOperation()
+
+  const {
+    schemeA,
+    schemeB,
+    schemeBList,
+    schemeValueList,
+    schemeC,
+    stateMap
+  } = window.testScheme() // globally accessible
+  document.write('<h4>schemeC.toStructJSON()</h4>')
+  document.write('<pre>')
+  document.write(JSON.stringify(schemeC.toStructJSON(), null, '·   '))
+  document.write('</pre>')
+  document.write('<hr />')
+  document.write('<h4>stateMap</h4>')
+  document.write('<pre>')
+  Object.keys(stateMap).forEach((key) => { document.write(`[${key}]\t: ${JSON.stringify(stateMap[ key ])}\n`) })
+  document.write('</pre>')
 </script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-import Operation from './operation'
+import { Operation } from './operation'
 import { Scheme, ObjectScheme, ArrayScheme } from './scheme'
 import { ObjectAs, ArrayOf, objectActMap, arrayActMap } from './creator'
 

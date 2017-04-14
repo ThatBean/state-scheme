@@ -1,6 +1,8 @@
-import Operation from './operation'
-
-const __DEV__ = process.env.NODE_ENV !== 'production'
+const objectMap = (object, mapFunc) => { // ALWAYS CHANGE
+  const result = {}
+  for (const key in object) result[ key ] = mapFunc(object[ key ], key)
+  return result
+}
 
 const setAssign = (set, assign) => {
   assign.forEach((v) => {
@@ -36,7 +38,7 @@ class Scheme {
     return (state, { type, payload }) => {
       const actionReducer = actMap[ type ]
       if (actionReducer) return actionReducer(state, payload) // processed
-      __DEV__ && console.warn('missed action', type, payload)
+      // console.warn('missed action', type, payload)
       return state // missed
     }
   }
@@ -82,7 +84,7 @@ class ObjectScheme extends Scheme {
     this.reducer = this.getReducer()
   }
 
-  toStructJSON () { return Operation.objectMap(this.struct, toStructJSONWithCheck) }
+  toStructJSON () { return objectMap(this.struct, toStructJSONWithCheck) }
 
   static getStructReducer (schemeKeyList, schemeMap) {
     return (state, action) => {
@@ -142,7 +144,7 @@ class ArrayScheme extends Scheme {
     }
   }
 
-  static getFilter (filter) {
+  static getFilter (filter) { // TODO: add more filters ?
     switch (filter.type) {
       case 'key-value': {
         const { key, value } = filter
