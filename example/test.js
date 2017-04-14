@@ -2,11 +2,11 @@ const { Operation, ObjectAs, ArrayOf } = window.StateScheme
 
 const assertEqual = (a, b) => {
   if (a === b) return
-  console.warn('[assertEqual]', a, b)
+  console.error('[assertEqual]', a, b)
 }
 const assertNotEqual = (a, b) => {
   if (a !== b) return
-  console.warn('[assertNotEqual]', a, b)
+  console.error('[assertNotEqual]', a, b)
 }
 
 window.testOperation = () => {
@@ -67,24 +67,116 @@ window.testOperation = () => {
   // arraySet
   assertEqual(arraySet(ARRAY_DATA, 0, 'a'), ARRAY_DATA)
   assertNotEqual(arraySet(ARRAY_DATA, 0, 'b'), ARRAY_DATA)
-  assertEqual(arraySet(ARRAY_DATA, 0, 'b')[0], 'b')
-  assertEqual(arraySet(ARRAY_DATA, 10, 'b')[10], 'b')
+  assertEqual(arraySet(ARRAY_DATA, 0, 'b')[ 0 ], 'b')
+  assertEqual(arraySet(ARRAY_DATA, 10, 'b')[ 10 ], 'b')
 
-  // TODO: more tests
-  // arrayDelete,
-  // arrayInsert,
-  // arrayPush,
-  // arrayUnshift,
-  // arrayPop,
-  // arrayShift,
-  // arrayConcat,
-  // arrayMatchPush,
-  // arrayMatchDelete,
-  // arrayMatchMove,
-  // arrayFindPush,
-  // arrayFindDelete,
-  // arrayFindMove,
+  // arrayDelete
+  assertEqual(arrayDelete(ARRAY_DATA, -1), ARRAY_DATA)
+  assertEqual(arrayDelete(ARRAY_DATA, 99), ARRAY_DATA)
+  assertNotEqual(arrayDelete(ARRAY_DATA, 0), ARRAY_DATA)
+  assertEqual(arrayDelete(ARRAY_DATA, 0)[ 0 ], SAMPLE_ARRAY)
+
+  // arrayInsert
+  assertNotEqual(arrayInsert(ARRAY_DATA, 0, 'I'), ARRAY_DATA)
+  assertNotEqual(arrayInsert(ARRAY_DATA, 6, 'I'), ARRAY_DATA)
+  assertNotEqual(arrayInsert(ARRAY_DATA, -1, 'I'), ARRAY_DATA)
+  assertEqual(arrayInsert(ARRAY_DATA, 0, 'I')[ 0 ], 'I')
+  assertEqual(arrayInsert(ARRAY_DATA, 1, 'I')[ 1 ], 'I')
+  assertEqual(arrayInsert(ARRAY_DATA, 2, 'I')[ 2 ], 'I')
+  assertEqual(arrayInsert(ARRAY_DATA, 6, 'I')[ 2 ], 'I')
+  assertNotEqual(arrayInsert(ARRAY_DATA, 6, 'I')[ 6 ], 'I')
+  assertEqual(arrayInsert(ARRAY_DATA, 0, 'I')[ 0 ], 'I')
+  assertEqual(arrayInsert(ARRAY_DATA, -1, 'I')[ 0 ], 'I')
+  assertNotEqual(arrayInsert(ARRAY_DATA, -1, 'I')[ -1 ], 'I')
+
+  // arrayPush
+  assertNotEqual(arrayPush(ARRAY_DATA, 'I'), ARRAY_DATA)
+  assertEqual(arrayPush(ARRAY_DATA, 'I')[ 2 ], 'I')
+
+  // arrayUnshift
+  assertNotEqual(arrayUnshift(ARRAY_DATA, 'I'), ARRAY_DATA)
+  assertEqual(arrayUnshift(ARRAY_DATA, 'I')[ 0 ], 'I')
+
+  // arrayPop
+  assertNotEqual(arrayPop(ARRAY_DATA), ARRAY_DATA)
+  assertEqual(arrayPop(ARRAY_DATA)[ 0 ], 'a')
+  assertNotEqual(arrayPop(ARRAY_DATA)[ 0 ], SAMPLE_ARRAY)
+  assertNotEqual(arrayPop(ARRAY_DATA)[ 1 ], SAMPLE_ARRAY)
+  assertEqual(arrayPop(ARRAY_DATA).length, 1)
+
+  // arrayShift
+  assertNotEqual(arrayShift(ARRAY_DATA), ARRAY_DATA)
+  assertEqual(arrayShift(ARRAY_DATA)[ 0 ], SAMPLE_ARRAY)
+  assertNotEqual(arrayShift(ARRAY_DATA)[ 0 ], 'a')
+  assertNotEqual(arrayShift(ARRAY_DATA)[ 1 ], 'a')
+  assertEqual(arrayShift(ARRAY_DATA).length, 1)
+
+  // arrayConcat
+  assertEqual(arrayConcat(ARRAY_DATA, null), ARRAY_DATA)
+  assertEqual(arrayConcat(ARRAY_DATA, []), ARRAY_DATA)
+  assertNotEqual(arrayConcat(ARRAY_DATA, [ 1 ]), ARRAY_DATA)
+  assertEqual(arrayConcat(ARRAY_DATA, [ 1 ])[ 2 ], 1)
+  assertEqual(arrayConcat(ARRAY_DATA, [ 1 ]).length, 3)
+
+  // arrayMatchPush
+  assertEqual(arrayMatchPush(ARRAY_DATA, 'a'), ARRAY_DATA)
+  assertEqual(arrayMatchPush(ARRAY_DATA, SAMPLE_ARRAY), ARRAY_DATA)
+  assertNotEqual(arrayMatchPush(ARRAY_DATA, 1), ARRAY_DATA)
+  assertNotEqual(arrayMatchPush(ARRAY_DATA, [ 1 ]), ARRAY_DATA)
+  assertEqual(arrayMatchPush(ARRAY_DATA, 1)[ 2 ], 1)
+  assertEqual(arrayMatchPush(ARRAY_DATA, 1).length, 3)
+
+  // arrayMatchDelete
+  assertNotEqual(arrayMatchDelete(ARRAY_DATA, 'a'), ARRAY_DATA)
+  assertNotEqual(arrayMatchDelete(ARRAY_DATA, SAMPLE_ARRAY), ARRAY_DATA)
+  assertEqual(arrayMatchDelete(ARRAY_DATA, 1), ARRAY_DATA)
+  assertEqual(arrayMatchDelete(ARRAY_DATA, [ 1 ]), ARRAY_DATA)
+  assertEqual(arrayMatchDelete(ARRAY_DATA, 'a')[ 0 ], SAMPLE_ARRAY)
+  assertEqual(arrayMatchDelete(ARRAY_DATA, 'a').length, 1)
+
+  // arrayMatchMove
+  assertNotEqual(arrayMatchMove(ARRAY_DATA, 1, 'a'), ARRAY_DATA)
+  assertNotEqual(arrayMatchMove(ARRAY_DATA, 2, 'a'), ARRAY_DATA)
+  assertEqual(arrayMatchMove(ARRAY_DATA, 0, 'a'), ARRAY_DATA)
+  assertEqual(arrayMatchMove(ARRAY_DATA, 1, 'a').length, 2)
+  assertEqual(arrayMatchMove(ARRAY_DATA, 1, 'a')[ 1 ], 'a')
+  assertEqual(arrayMatchMove(ARRAY_DATA, -1, 'a'), arrayMatchMove(ARRAY_DATA, 0, 'a'))
+  assertEqual(arrayMatchMove(ARRAY_DATA, 2, 'a')[ 0 ], arrayMatchMove(ARRAY_DATA, 1, 'a')[ 0 ])
+  assertEqual(arrayMatchMove(ARRAY_DATA, 2, 'a')[ 1 ], arrayMatchMove(ARRAY_DATA, 1, 'a')[ 1 ])
+
+  // arrayFindPush
+  assertNotEqual(arrayFindPush(ARRAY_DATA, (v) => v === 'F', 'F'), ARRAY_DATA)
+  assertNotEqual(arrayFindPush(ARRAY_DATA, (v) => false, 'F'), ARRAY_DATA)
+  assertEqual(arrayFindPush(ARRAY_DATA, (v) => v === 'a', 'F'), ARRAY_DATA)
+  assertEqual(arrayFindPush(ARRAY_DATA, (v) => true, 'F'), ARRAY_DATA)
+  assertEqual(arrayFindPush(ARRAY_DATA, (v) => false, 'F')[ 2 ], 'F')
+  assertEqual(arrayFindPush(ARRAY_DATA, (v) => false, 'F').length, 3)
+
+  // arrayFindDelete
+  assertEqual(arrayFindDelete(ARRAY_DATA, (v) => v === 'F'), ARRAY_DATA)
+  assertEqual(arrayFindDelete(ARRAY_DATA, (v) => false), ARRAY_DATA)
+  assertNotEqual(arrayFindDelete(ARRAY_DATA, (v) => v === 'a'), ARRAY_DATA)
+  assertNotEqual(arrayFindDelete(ARRAY_DATA, (v) => true), ARRAY_DATA)
+  assertEqual(arrayFindDelete(ARRAY_DATA, (v) => true)[ 0 ], SAMPLE_ARRAY)
+  assertEqual(arrayFindDelete(ARRAY_DATA, (v) => true).length, 1)
+
+  // arrayFindMove
+  assertEqual(arrayFindMove(ARRAY_DATA, (v) => v === 'F', 2), ARRAY_DATA)
+  assertEqual(arrayFindMove(ARRAY_DATA, (v) => false, 2), ARRAY_DATA)
+  assertNotEqual(arrayFindMove(ARRAY_DATA, (v) => v === 'a', 2), ARRAY_DATA)
+  assertNotEqual(arrayFindMove(ARRAY_DATA, (v) => true, 2), ARRAY_DATA)
+  assertEqual(arrayFindMove(ARRAY_DATA, (v) => true, 1)[ 0 ], SAMPLE_ARRAY)
+  assertEqual(arrayFindMove(ARRAY_DATA, (v) => true, 1)[ 1 ], 'a')
+  assertEqual(arrayFindMove(ARRAY_DATA, (v) => true, 1).length, 2)
+  assertEqual(arrayFindMove(ARRAY_DATA, (v) => true, 2)[ 0 ], arrayFindMove(ARRAY_DATA, (v) => true, 1)[ 0 ])
+  assertEqual(arrayFindMove(ARRAY_DATA, (v) => true, 2)[ 1 ], arrayFindMove(ARRAY_DATA, (v) => true, 1)[ 1 ])
+
   // arrayFindSet
+  assertEqual(arrayFindSet(ARRAY_DATA, (v) => v === 'F', 'F'), ARRAY_DATA)
+  assertEqual(arrayFindSet(ARRAY_DATA, (v) => false, 'F'), ARRAY_DATA)
+  assertNotEqual(arrayFindSet(ARRAY_DATA, (v) => v === 'a', 'F'), ARRAY_DATA)
+  assertNotEqual(arrayFindSet(ARRAY_DATA, (v) => true, 'F'), ARRAY_DATA)
+  assertEqual(arrayFindSet(ARRAY_DATA, (v) => true, 'F')[ 0 ], 'F')
 }
 
 window.testScheme = () => {

@@ -27,8 +27,11 @@ const arraySet = (array, index, value) => {
   result[ index ] = value
   return result
 }
-const arrayDelete = (array, index) => (array.length >= index + 1) ? [ ...array.slice(0, index), ...array.slice(index + 1) ] : array
-const arrayInsert = (array, index, value) => [ ...array.slice(0, index), value, ...array.slice(index) ] // ALWAYS CHANGE
+const arrayDelete = (array, index) => (index >= 0 && index <= array.length - 1) ? [ ...array.slice(0, index), ...array.slice(index + 1) ] : array
+const arrayInsert = (array, index, value) => { // ALWAYS CHANGE
+  index = Math.min(Math.max(index, 0), array.length)
+  return [ ...array.slice(0, index), value, ...array.slice(index) ]
+}
 const arrayPush = (array, value) => [ ...array, value ] // ALWAYS CHANGE
 const arrayUnshift = (array, value) => [ value, ...array ] // ALWAYS CHANGE
 const arrayPop = (array) => {
@@ -44,16 +47,17 @@ const arrayShift = (array) => {
   return result
 }
 const arrayConcat = (array, concat) => (concat && concat.length) ? [ ...array, ...concat ] : array
-const arrayMatchPush = (array, value) => array.includes(value) ? [ ...array, value ] : array
+const arrayMatchPush = (array, value) => !array.includes(value) ? [ ...array, value ] : array
 const arrayMatchDelete = (array, value) => {
   const index = array.indexOf(value)
   return ~index ? [ ...array.slice(0, index), ...array.slice(index + 1) ] : array
 }
 const arrayMatchMove = (array, index, value) => {
+  index = Math.min(Math.max(index, 0), array.length - 1)
   const fromIndex = array.indexOf(value)
-  if (!~fromIndex || fromIndex === index) return array
-  if (fromIndex < index) return [ ...array.slice(0, fromIndex), ...array.slice(fromIndex + 1, index), value, ...array.slice(index) ]
-  else return [ ...array.slice(0, index), value, ...array.slice(index, fromIndex), ...array.slice(fromIndex + 1) ]
+  return (!~fromIndex || fromIndex === index) ? array
+    : (fromIndex < index) ? [ ...array.slice(0, fromIndex), ...array.slice(fromIndex + 1, index + 1), value, ...array.slice(index + 1) ]
+      : [ ...array.slice(0, index), value, ...array.slice(index, fromIndex), ...array.slice(fromIndex + 1) ]
 }
 const arrayFindPush = (array, find, value) => array.find(find) === undefined ? [ ...array, value ] : array
 const arrayFindDelete = (array, find) => {
@@ -62,10 +66,10 @@ const arrayFindDelete = (array, find) => {
 }
 const arrayFindMove = (array, find, index) => {
   const fromIndex = array.findIndex(find)
-  if (!~fromIndex || fromIndex === index) return array
-  const value = array[ index ]
-  if (fromIndex < index) return [ ...array.slice(0, fromIndex), ...array.slice(fromIndex + 1, index), value, ...array.slice(index) ]
-  else return [ ...array.slice(0, index), value, ...array.slice(index, fromIndex), ...array.slice(fromIndex + 1) ]
+  const value = array[ fromIndex ]
+  return (!~fromIndex || fromIndex === index) ? array
+    : (fromIndex < index) ? [ ...array.slice(0, fromIndex), ...array.slice(fromIndex + 1, index + 1), value, ...array.slice(index + 1) ]
+      : [ ...array.slice(0, index), value, ...array.slice(index, fromIndex), ...array.slice(fromIndex + 1) ]
 }
 const arrayFindSet = (array, find, value) => {
   const index = array.findIndex(find)
