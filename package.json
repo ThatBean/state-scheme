@@ -1,6 +1,6 @@
 {
   "name": "state-scheme",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "thatbean",
   "license": "MIT",
   "description": "Create composable State - Reducer by define them as schemes",
