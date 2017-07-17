@@ -1,7 +1,5 @@
-/**
- * Operation for Immutable operate Data Structure
- * use only Object and Array for JSON support
- */
+// Operation for Immutable operate Data Structure
+// use only Object and Array for JSON support
 
 // Object
 const objectSet = (object, key, value) => (object[ key ] !== value) ? { ...object, [key]: value } : object
