@@ -1,13 +1,5 @@
-# source
+/.*
+/config
 /source
 /example
-
-# generated
-/distribution
-
-# config files
-.npmignore
-.babelrc
-.eslintrc
-webpack.config.js
-.idea
+/state-scheme*

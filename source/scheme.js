@@ -144,7 +144,7 @@ class ArrayScheme extends Scheme {
     }
   }
 
-  static getFilter (filter) { // TODO: add more filters ?
+  static getFilter (filter) { // TODO: add more filters
     switch (filter.type) {
       case 'key-value': {
         const { key, value } = filter

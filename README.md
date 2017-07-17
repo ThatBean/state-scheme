@@ -18,17 +18,6 @@ export {
   arrayActMap,
   Operation
 }
-
-export default {
-  Scheme,
-  ObjectScheme,
-  ArrayScheme,
-  ObjectAs,
-  ArrayOf,
-  objectActMap,
-  arrayActMap,
-  Operation
-}
 ```
 
 #### Operation
