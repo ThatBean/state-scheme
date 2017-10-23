@@ -1,6 +1,6 @@
 {
   "name": "state-scheme",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "author": "thatbean",
   "license": "MIT",
   "description": "Create composable State - Reducer by define them as schemes",
@@ -15,26 +15,22 @@
     "url": "git+https://github.com/thatbean/state-scheme.git"
   },
   "main": "library/index.js",
+  "module": "module/index.js",
   "scripts": {
-    "example": "cross-env NODE_ENV=development webpack --watch --config config/example.conf.js",
-    "library": "cross-env NODE_ENV=production webpack --config config/library.conf.js",
-    "build": "npm run library",
+    "example": "cross-env NODE_ENV=development webpack --config config/example.conf.js",
+    "example-dev": "cross-env NODE_ENV=development webpack --watch --config config/example.conf.js",
+    "library": "cross-env NODE_ENV=production BABEL_ENV=library babel ./source --out-dir ./library",
+    "library-dev": "cross-env NODE_ENV=development BABEL_ENV=library babel ./source --out-dir ./library --watch",
+    "module": "cross-env NODE_ENV=production BABEL_ENV=module babel ./source --out-dir ./module",
+    "build": "npm run library && npm run module",
     "start": "npm run example",
     "prepare": "npm run build"
   },
+  "engines": {
+    "node": "8.x",
+    "npm": "5.x"
+  },
   "devDependencies": {
-    "babel-core": "^6.25.0",
-    "babel-eslint": "^7.2.3",
-    "babel-loader": "^7.1.1",
-    "babel-polyfill": "^6.16.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-stage-0": "^6.24.1",
-    "cross-env": "^5.0.1",
-    "eslint": "^4.2.0",
-    "eslint-config-standard": "^10.2.1",
-    "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-standard": "^3.0.1",
-    "webpack": "^3.3.0"
+    "dev-dep-web": "^0.0.5"
   }
 }
