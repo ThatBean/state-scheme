@@ -1,6 +1,6 @@
 {
   "name": "state-scheme",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "thatbean",
   "license": "MIT",
   "description": "Create composable State - Reducer by define them as schemes",
@@ -15,7 +15,6 @@
     "url": "git+https://github.com/thatbean/state-scheme.git"
   },
   "main": "library/index.js",
-  "module": "module/index.js",
   "scripts": {
     "example": "cross-env NODE_ENV=development webpack --config config/example.conf.js",
     "example-dev": "cross-env NODE_ENV=development webpack --watch --config config/example.conf.js",
@@ -27,10 +26,10 @@
     "prepare": "npm run build"
   },
   "engines": {
-    "node": "8.x",
-    "npm": "5.x"
+    "node": ">=8.3.0",
+    "npm": ">=5.4.0"
   },
   "devDependencies": {
-    "dev-dep-web": "^0.0.5"
+    "dev-dep-web": "^0.0.6"
   }
 }
